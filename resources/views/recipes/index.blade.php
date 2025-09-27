@@ -66,7 +66,7 @@
                 </div>
             </form>
 
-            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div class="flex flex-col">
                 @forelse ($recipes as $recipe)
                     <article class="flex h-full flex-row overflow-hidden rounded-lg bg-white shadow mt-4">
                         <a href="{{ route('recipes.show', $recipe) }}" class="block aspect-video bg-gray-100">

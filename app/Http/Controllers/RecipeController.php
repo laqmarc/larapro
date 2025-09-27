@@ -69,7 +69,7 @@ class RecipeController extends Controller
             ->withQueryString();
 
         $dietaryTags = DietaryTag::orderBy('name')->get();
-        $difficulties = ['easy', 'medium', 'hard'];
+        $difficulties = ['Easy', 'Medium', 'Hard'];
         $popularIngredients = Ingredient::orderBy('name')->limit(20)->get();
 
         return view('recipes.index', compact('recipes', 'dietaryTags', 'difficulties', 'popularIngredients'));

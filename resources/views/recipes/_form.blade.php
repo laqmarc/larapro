@@ -76,7 +76,7 @@
                     <x-input-label for="difficulty" value="Dificultat" />
                     <select id="difficulty" name="difficulty" class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                         <option value="">Seleccionar la difucultat</option>
-                        @foreach (['facil', 'Mitjana', 'Dificil'] as $option)
+                        @foreach (['easy', 'medium', 'hard'] as $option)
                             <option value="{{ $option }}" @selected(old('difficulty', $isEdit ? $recipe->difficulty : '') === $option)>
                                 {{ Str::title($option) }}
                             </option>
