@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
             <div>
-                <p class="text-sm text-gray-500">{{ $recipe->author->name }} � {{ $recipe->published_at?->diffForHumans() ?? 'Draft' }}</p>
+                <p class="text-sm text-gray-500">{{ $recipe->author->name }} - {{ $recipe->published_at?->diffForHumans() ?? 'Draft' }}</p>
                 <h1 class="text-2xl font-semibold leading-tight text-gray-900">{{ $recipe->title }}</h1>
             </div>
             <div class="flex items-center gap-3">
