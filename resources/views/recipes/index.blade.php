@@ -33,11 +33,11 @@
                 </div>
                 <div class="lg:col-span-2 mb-4">
                     <x-input-label value="Etiquetes dietètiques" />
-                    <div class="mt-3 flex flex-wrap gap-2">
+                    <div class="fw gap-2 mt-3 ">
                         @foreach ($dietaryTags as $tag)
-                            <label class="flex items-center space-x-2 rounded-full border border-gray-200 px-3 py-1 text-sm">
+                            <label class="flex items-center space-x-2 rounded-full border border-gray-200 px-3 py-1 text-sm ">
                                 <input type="checkbox" name="dietary[]" value="{{ $tag->slug }}" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" @checked(collect(request('dietary', []))->contains($tag->slug))>
-                                <span>{{ $tag->name }}</span>
+                                <span class="m-5">{{ $tag->name }}</span>
                             </label>
                         @endforeach
                     </div>
