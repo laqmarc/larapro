@@ -15,6 +15,10 @@ class Recipe extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public const DIFFICULTIES = ['facil', 'mitg', 'dificil'];
+
+    public const DISH_TYPES = ['primer', 'segon', 'postres', 'esmorzar', 'berenar'];
+
     protected $fillable = [
         'user_id',
         'title',
@@ -26,6 +30,7 @@ class Recipe extends Model
         'cook_minutes',
         'servings',
         'difficulty',
+        'dish_type',
         'is_public',
         'published_at',
         'nutrition',

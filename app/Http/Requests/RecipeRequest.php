@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Recipe;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -22,7 +23,8 @@ class RecipeRequest extends FormRequest
             'prep_minutes' => ['nullable', 'integer', 'min:0'],
             'cook_minutes' => ['nullable', 'integer', 'min:0'],
             'servings' => ['nullable', 'integer', 'min:1', 'max:24'],
-            'difficulty' => ['nullable', Rule::in(['easy', 'medium', 'hard'])],
+            'difficulty' => ['nullable', Rule::in(Recipe::DIFFICULTIES)],
+            'dish_type' => ['nullable', Rule::in(Recipe::DISH_TYPES)],
             'is_public' => ['sometimes', 'boolean'],
             'published_at' => ['nullable', 'date'],
             'nutrition' => ['nullable', 'array'],

@@ -33,7 +33,8 @@ class RecipeManagementTest extends TestCase
                 'prep_minutes' => 10,
                 'cook_minutes' => 20,
                 'servings' => 4,
-                'difficulty' => 'easy',
+                'difficulty' => Recipe::DIFFICULTIES[0],
+                'dish_type' => Recipe::DISH_TYPES[0],
                 'is_public' => true,
                 'dietary_tags' => [$tag->id],
                 'ingredients' => [
@@ -57,6 +58,8 @@ class RecipeManagementTest extends TestCase
         $this->assertNotNull($recipe);
         $this->assertSame('Test Recipe', $recipe->title);
         $this->assertEquals($user->id, $recipe->user_id);
+        $this->assertSame(Recipe::DIFFICULTIES[0], $recipe->difficulty);
+        $this->assertSame(Recipe::DISH_TYPES[0], $recipe->dish_type);
         $this->assertTrue($recipe->dietaryTags->contains($tag));
         $this->assertCount(2, $recipe->media);
         Storage::disk('public')->assertExists($recipe->media->first()->path);
@@ -90,7 +93,8 @@ class RecipeManagementTest extends TestCase
                 'summary' => null,
                 'description' => 'Updated description',
                 'instructions' => 'Updated instructions',
-                'difficulty' => 'medium',
+                'difficulty' => Recipe::DIFFICULTIES[1],
+                'dish_type' => Recipe::DISH_TYPES[1],
                 'prep_minutes' => 5,
                 'cook_minutes' => 15,
                 'servings' => 2,
@@ -110,6 +114,8 @@ class RecipeManagementTest extends TestCase
         $recipe->refresh();
 
         $this->assertSame('Updated Title', $recipe->title);
+        $this->assertSame(Recipe::DIFFICULTIES[1], $recipe->difficulty);
+        $this->assertSame(Recipe::DISH_TYPES[1], $recipe->dish_type);
         $this->assertEquals(1, $recipe->ingredients()->count());
     }
 
@@ -177,4 +183,5 @@ class RecipeManagementTest extends TestCase
         ]);
     }
 }
+
 

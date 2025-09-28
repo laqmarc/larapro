@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
             <div>
@@ -39,10 +39,13 @@
                         <p class="text-lg text-gray-700">{{ $recipe->summary }}</p>
                     @endif
                     <div class="flex flex-wrap gap-3 text-sm">
-                        <span class="rounded-full bg-indigo-50 px-3 py-1 font-semibold text-indigo-600">{{ Str::title($recipe->difficulty ?? 'Any') }}</span>
-                        <span class="rounded-full bg-gray-100 px-3 py-1 text-gray-700">Racions {{ $recipe->servings ?? '�' }}</span>
-                        <span class="rounded-full bg-gray-100 px-3 py-1 text-gray-700">Preparació {{ $recipe->prep_minutes ?? '�' }}m</span>
-                        <span class="rounded-full bg-gray-100 px-3 py-1 text-gray-700">Cuinant {{ $recipe->cook_minutes ?? '�' }}m</span>
+                        <span class="rounded-full bg-indigo-50 px-3 py-1 font-semibold text-indigo-600">{{ Str::title($recipe->difficulty ?? 'Qualsevol') }}</span>
+                        @if ($recipe->dish_type)
+                            <span class="rounded-full bg-emerald-50 px-3 py-1 font-semibold text-emerald-600">{{ Str::title($recipe->dish_type) }}</span>
+                        @endif
+                        <span class="rounded-full bg-gray-100 px-3 py-1 text-gray-700">Racions {{ $recipe->servings ?? '���' }}</span>
+                        <span class="rounded-full bg-gray-100 px-3 py-1 text-gray-700">Preparació {{ $recipe->prep_minutes ?? '���' }}m</span>
+                        <span class="rounded-full bg-gray-100 px-3 py-1 text-gray-700">Cuinant {{ $recipe->cook_minutes ?? '���' }}m</span>
                     </div>
                     @if ($recipe->dietaryTags->isNotEmpty())
                         <div class="flex flex-wrap gap-2 text-sm">

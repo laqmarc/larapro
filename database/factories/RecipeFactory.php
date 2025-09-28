@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Recipe;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -28,7 +29,8 @@ class RecipeFactory extends Factory
             'prep_minutes' => fake()->numberBetween(5, 60),
             'cook_minutes' => fake()->optional()->numberBetween(10, 120),
             'servings' => fake()->numberBetween(1, 8),
-            'difficulty' => fake()->randomElement(['easy', 'medium', 'hard']),
+            'difficulty' => fake()->randomElement(Recipe::DIFFICULTIES),
+            'dish_type' => fake()->randomElement(Recipe::DISH_TYPES),
             'is_public' => $isPublic,
             'published_at' => $isPublic ? fake()->dateTimeBetween('-1 year', 'now') : null,
             'nutrition' => fake()->optional()->passthrough([

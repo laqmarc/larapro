@@ -36,6 +36,10 @@ class RecipeController extends Controller
             $query->where('difficulty', $difficulty);
         }
 
+        if ($dishType = $request->string('dish_type')->toString()) {
+            $query->where('dish_type', $dishType);
+        }
+
         if ($dietary = $request->input('dietary')) {
             $dietary = collect(is_array($dietary) ? $dietary : explode(',', $dietary))
                 ->filter()
@@ -69,10 +73,11 @@ class RecipeController extends Controller
             ->withQueryString();
 
         $dietaryTags = DietaryTag::orderBy('name')->get();
-        $difficulties = ['Easy', 'Medium', 'Hard'];
+        $difficulties = Recipe::DIFFICULTIES;
+        $dishTypes = Recipe::DISH_TYPES;
         $popularIngredients = Ingredient::orderBy('name')->limit(20)->get();
 
-        return view('recipes.index', compact('recipes', 'dietaryTags', 'difficulties', 'popularIngredients'));
+        return view('recipes.index', compact('recipes', 'dietaryTags', 'difficulties', 'dishTypes', 'popularIngredients'));
     }
 
     public function create(): View
@@ -81,8 +86,10 @@ class RecipeController extends Controller
 
         $dietaryTags = DietaryTag::orderBy('name')->get();
         $ingredients = Ingredient::orderBy('name')->get();
+        $difficulties = Recipe::DIFFICULTIES;
+        $dishTypes = Recipe::DISH_TYPES;
 
-        return view('recipes.create', compact('dietaryTags', 'ingredients'));
+        return view('recipes.create', compact('dietaryTags', 'ingredients', 'difficulties', 'dishTypes'));
     }
 
     public function store(RecipeRequest $request): RedirectResponse
@@ -103,6 +110,7 @@ class RecipeController extends Controller
                 'cook_minutes' => $data['cook_minutes'] ?? null,
                 'servings' => $data['servings'] ?? null,
                 'difficulty' => $data['difficulty'] ?? null,
+                'dish_type' => $data['dish_type'] ?? null,
                 'is_public' => (bool) ($data['is_public'] ?? false),
                 'published_at' => $this->resolvePublishedAt($data),
                 'nutrition' => $this->filterNutrition($data['nutrition'] ?? null),
@@ -153,9 +161,11 @@ class RecipeController extends Controller
 
         $dietaryTags = DietaryTag::orderBy('name')->get();
         $ingredients = Ingredient::orderBy('name')->get();
+        $difficulties = Recipe::DIFFICULTIES;
+        $dishTypes = Recipe::DISH_TYPES;
         $recipe->load(['dietaryTags', 'ingredients', 'media']);
 
-        return view('recipes.edit', compact('recipe', 'dietaryTags', 'ingredients'));
+        return view('recipes.edit', compact('recipe', 'dietaryTags', 'ingredients', 'difficulties', 'dishTypes'));
     }
 
     public function update(RecipeRequest $request, Recipe $recipe): RedirectResponse
@@ -176,6 +186,7 @@ class RecipeController extends Controller
                 'cook_minutes' => $data['cook_minutes'] ?? null,
                 'servings' => $data['servings'] ?? null,
                 'difficulty' => $data['difficulty'] ?? null,
+                'dish_type' => $data['dish_type'] ?? null,
                 'is_public' => (bool) ($data['is_public'] ?? false),
                 'published_at' => $this->resolvePublishedAt($data, $recipe),
                 'nutrition' => $this->filterNutrition($data['nutrition'] ?? null),
@@ -332,3 +343,5 @@ class RecipeController extends Controller
         return Str::slug($title) . '-' . Str::random(6);
     }
 }
+
+
