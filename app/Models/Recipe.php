@@ -35,7 +35,7 @@ class Recipe extends Model
         'published_at',
         'nutrition',
     ];
-*ryabTg6ysx95W?Z
+
     protected $casts = [
         'is_public' => 'boolean',
         'published_at' => 'datetime',
