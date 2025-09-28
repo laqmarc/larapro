@@ -94,10 +94,21 @@
                     <section class="rounded-lg bg-white p-6 shadow">
                         <h2 class="text-lg font-semibold text-gray-900">Instruccions</h2>
                         <div class="mt-4 space-y-6 text-gray-700">
-                            @foreach (preg_split('/\n\n+/', $recipe->instructions) as $step)
+                            @php
+                                $instructionSteps = collect(preg_split('/\?\
+\?\
++/', (string) $recipe->instructions))
+                                    ->map(fn ($step) => trim($step))
+                                    ->filter()
+                                    ->values();
+                            @endphp
+                            @foreach ($instructionSteps as $index => $step)
                                 <div class="flex gap-4">
-                                    <span class="mt-1 h-8 w-8 flex-shrink-0 rounded-full bg-indigo-100 text-center text-sm font-semibold leading-8 text-indigo-700">{{ $loop->iteration }}</span>
-                                    <p>{{ $step }}</p>
+                                    <span class="mt-1 h-8 w-8 flex-shrink-0 rounded-full bg-indigo-100 text-center text-sm font-semibold leading-8 text-indigo-700">{{ $index + 1 }}</span>
+                                    <div class="space-y-1">
+                                        <p class="text-sm font-semibold text-gray-900">Pas {{ $index + 1 }}</p>
+                                        <p>{{ $step }}</p>
+                                    </div>
                                 </div>
                             @endforeach
                         </div>

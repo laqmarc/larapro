@@ -20,6 +20,15 @@
     $selectedTags = collect(old('dietary_tags', $isEdit ? $recipe->dietaryTags->pluck('id')->all() : []));
     $difficulties = $difficulties ?? \App\Models\Recipe::DIFFICULTIES;
     $dishTypes = $dishTypes ?? \App\Models\Recipe::DISH_TYPES;
+    $instructionSteps = collect(preg_split('/\r?\n\r?\n/', old('instructions', $isEdit ? $recipe->instructions : '')))
+        ->map(fn ($step) => trim($step))
+        ->filter(fn ($step) => $step !== '')
+        ->values()
+        ->all();
+
+    if (empty($instructionSteps)) {
+        $instructionSteps = [''];
+    }
 @endphp
 
 <div x-data="recipeForm({
@@ -29,6 +38,7 @@
             'name' => $ingredient->name,
             'slug' => $ingredient->slug,
         ])) }},
+        instructions: {{ json_encode($instructionSteps) }},
     })" class="space-y-10">
     <div class="grid gap-6 lg:grid-cols-2">
         <div class="space-y-6">
@@ -51,12 +61,30 @@
             </div>
 
             <div>
-                <x-input-label for="instructions" value="Intruccions" />
-                <textarea id="instructions" name="instructions" rows="8" class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>{{ old('instructions', $isEdit ? $recipe->instructions : '') }}</textarea>
+                <div class="flex items-center justify-between">
+                    <x-input-label for="instructions" value="Intruccions" />
+                    <button type="button" class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        x-on:click="addInstruction()">Afegir pas</button>
+                </div>
+                <div class="mt-4 space-y-4">
+                    <template x-for="(step, index) in instructions" :key="index">
+                        <div class="rounded-lg border border-gray-200 p-4">
+                            <div class="flex items-center justify-between">
+                                <h4 class="text-sm font-semibold text-gray-700">Pas <span x-text="index + 1"></span></h4>
+                                <button type="button" class="text-sm text-red-600 hover:underline" x-show="instructions.length > 1"
+                                    x-on:click="removeInstruction(index)">Borrar</button>
+                            </div>
+                            <textarea :id="'instruction-step-' + index" rows="3"
+                                class="mt-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                x-model="instructions[index]" placeholder="Descriu el pas"></textarea>
+                        </div>
+                    </template>
+                </div>
+                <textarea id="instructions" x-ref="instructionsField" name="instructions" class="hidden" required
+                    x-effect="$refs.instructionsField.value = instructions.map(step => step.trim()).filter(step => step.length).join('\n\n')"></textarea>
                 <x-input-error :messages="$errors->get('instructions')" class="mt-2" />
             </div>
         </div>
-
         <div class="space-y-6">
             <div class="grid grid-cols-2 gap-4">
                 <div>
@@ -206,7 +234,7 @@
                 <x-input-error :messages="$errors->get('ingredients')" class="mt-2" />
             </div>
 
-            <button type="button" class="mt-4 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            <button type="button" class="mt-4 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-semibold text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 x-on:click="addIngredient()">
                 Afegir ingredient
             </button>
@@ -253,11 +281,25 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('recipeForm', (initialState) => ({
                 ingredients: initialState.ingredients ?? [],
+                instructions: Array.isArray(initialState.instructions) && initialState.instructions.length
+                    ? [...initialState.instructions]
+                    : [''],
                 addIngredient() {
                     this.ingredients.push({ id: null, name: '', quantity: null, unit: '', preparation: '', position: this.ingredients.length });
                 },
                 removeIngredient(index) {
                     this.ingredients.splice(index, 1);
+                },
+                addInstruction() {
+                    this.instructions.push('');
+                },
+                removeInstruction(index) {
+                    if (this.instructions.length === 1) {
+                        this.instructions[0] = '';
+                        return;
+                    }
+
+                    this.instructions.splice(index, 1);
                 },
             }));
         });
