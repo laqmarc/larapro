@@ -78,12 +78,20 @@
             <div class="flex flex-col">
                 @forelse ($recipes as $recipe)
                     <article class="mt-4 flex h-full flex-row overflow-hidden rounded-lg bg-white shadow">
-                        <a href="{{ route('recipes.show', $recipe) }}" class="block aspect-video bg-gray-100">
-                            @php $primary = $recipe->media->firstWhere('is_primary', true); @endphp
+                        @php $primary = $recipe->media->firstWhere('is_primary', true); @endphp
+                        <div class="flex flex-row p-4">
+                        <a href="{{ route('recipes.show', $recipe) }}"
+                           class="block aspect-square overflow-hidden bg-gray-100 bg-cover bg-center bg-no-repeat basis-64 rounded-full"
+                           @if ($primary)
+                               style="background-image: url('{{ Storage::disk($primary->disk)->url($primary->path) }}');min-width:160px;min-height:160px; max-width:160px;max-height:160px; background-position: center; background-size: cover;"
+                           @endif>
                             @if ($primary)
-                                <img src="{{ Storage::disk($primary->disk)->url($primary->path) }}" alt="{{ $recipe->title }}" title="{{ $recipe->title }}" style="width:100%;max-width: 250px;" class="unters" />
+                                <span class="sr-only">{{ $recipe->title }}</span>
+                            @else
+                                <span class="flex h-full w-full items-center justify-center text-sm text-gray-400">Sense imatge</span>
                             @endif
                         </a>
+                        </div>
                         <div class="flex flex-1 flex-col space-y-4 p-4">
                             <div class="flex items-start justify-between">
                                 <a href="{{ route('recipes.show', $recipe) }}" class="text-lg font-semibold text-gray-900">{{ $recipe->title }}</a>
@@ -121,3 +129,4 @@
         </div>
     </div>
 </x-app-layout>
+
