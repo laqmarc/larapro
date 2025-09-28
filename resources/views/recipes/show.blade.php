@@ -66,8 +66,25 @@
                                 <li class="flex justify-between">
                                     <span>{{ $ingredient->name }} @if ($ingredient->pivot->preparation)<span class="text-sm text-gray-500">({{ $ingredient->pivot->preparation }})</span>@endif</span>
                                     <span class="font-medium">
-                                        {{ $ingredient->pivot->quantity ? rtrim(rtrim(number_format($ingredient->pivot->quantity, 2), '0'), '.') : '' }}
-                                        {{ $ingredient->pivot->unit }}
+                                        @php
+                                            $quantity = $ingredient->pivot->quantity;
+                                            $units = $ingredient->pivot->unit;
+                                        @endphp
+
+                                        @if (! is_null($quantity) && $quantity !== '')
+                                            {{ rtrim(rtrim(number_format($quantity, 2), '0'), '.') }} gr
+                                        @endif
+
+                                        @if (! is_null($units) && $units !== '')
+                                            @if (! is_null($quantity) && $quantity !== '')
+                                                <span aria-hidden="true">&middot;</span>
+                                            @endif
+                                            @if (is_numeric($units))
+                                                {{ rtrim(rtrim(number_format($units, 2), '0'), '.') }} u
+                                            @else
+                                                {{ $units }}
+                                            @endif
+                                        @endif
                                     </span>
                                 </li>
                             @endforeach
@@ -149,3 +166,4 @@
         </div>
     </div>
 </x-app-layout>
+
