@@ -17,7 +17,7 @@ class Recipe extends Model
 
     public const DIFFICULTIES = ['facil', 'mitg', 'dificil'];
 
-    public const DISH_TYPES = ['primer', 'segon', 'postres', 'esmorzar', 'berenar'];
+    public const DISH_TYPES = ['primer plat', 'segon plat', 'postres', 'esmorzar', 'berenar'];
 
     protected $fillable = [
         'user_id',

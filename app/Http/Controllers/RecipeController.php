@@ -199,7 +199,7 @@ class RecipeController extends Controller
 
         return redirect()
             ->route('recipes.edit', $recipe)
-            ->with('status', 'Recipe updated successfully.');
+            ->with('status', 'Recepta actualitzada correctament.');
     }
 
     public function destroy(Recipe $recipe): RedirectResponse

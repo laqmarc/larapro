@@ -134,7 +134,7 @@
                     <label class="flex items-center space-x-3">
                         <input type="checkbox" name="is_public" value="1" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                             @checked(old('is_public', $isEdit ? $recipe->is_public : false))>
-                        <span class="text-sm text-gray-700">Fes pǧblica la recepta</span>
+                        <span class="text-sm text-gray-700">Fes pùblica la recepta</span>
                     </label>
 
                     <div>

@@ -20,7 +20,7 @@
                                 <p class="mt-2 line-clamp-3 text-sm text-gray-600">{{ $recipe->summary ?? Str::limit($recipe->description, 120) }}</p>
                             </div>
                             <div class="mt-4 flex items-center justify-between text-sm text-gray-500">
-                                <span>By {{ $recipe->author->name }}</span>
+                                <span>Per {{ $recipe->author->name }}</span>
                                 <form method="POST" action="{{ route('recipes.unsave', $recipe) }}">
                                     @csrf
                                     @method('DELETE')
