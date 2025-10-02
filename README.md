@@ -1,61 +1,102 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# LaraPro
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+LaraPro is a full-stack Laravel 12 application for discovering, authoring, and saving cooking recipes. It delivers a filterable public catalog, rich authoring tools for home cooks, and personal cookbooks powered by authentication from Laravel Breeze with a Tailwind CSS and Alpine.js front end.
 
-## About Laravel
+## Features
+- Browse a public recipe catalog with full-text search, difficulty and dish-type filters, dietary tags, ingredient targeting, saved-only, and mine-only toggles.
+- Author detailed recipes with structured ingredients, cooking times, servings, optional nutrition facts, and photo galleries.
+- Toggle recipe visibility between private drafts and public posts with automatic publish timestamps and slug management.
+- Save favorite public recipes to a personal collection and quickly revisit them from the "Saved" view.
+- Review recipe pages enriched with media, tags, nutrition, related suggestions, and published community comments.
+- Email-verified authentication, profile management, and policy-based access control for editing or deleting authored recipes.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tech Stack
+- PHP 8.2 with Laravel 12
+- SQLite by default (swap to MySQL/PostgreSQL via `.env`)
+- Tailwind CSS, Alpine.js, Vite, and Laravel Breeze
+- Laravel Pail for real-time log streaming and queue worker during development
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Getting Started
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Prerequisites
+- PHP 8.2 with the `pdo_sqlite`, `openssl`, `mbstring`, `fileinfo`, and `intl` extensions
+- Composer
+- Node.js 18+ and npm
+- SQLite (bundled with PHP) or another database supported by Laravel
 
-## Learning Laravel
+### Installation
+1. Install PHP dependencies:
+   ```bash
+   composer install
+   ```
+2. Install front-end dependencies:
+   ```bash
+   npm install
+   ```
+3. Copy the environment file and adjust any settings you need (app name, mail driver, etc.):
+   ```bash
+   cp .env.example .env
+   ```
+4. If you are sticking with SQLite, make sure the database file exists (Laravel's default `.env` already points to it):
+   ```bash
+   php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
+   ```
+5. Generate the application key:
+   ```bash
+   php artisan key:generate
+   ```
+6. Run the database migrations and seeders to create demo content, dietary tags, and a test user:
+   ```bash
+   php artisan migrate --seed
+   ```
+7. Expose the recipe media stored on the `public` disk:
+   ```bash
+   php artisan storage:link
+   ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Running the app
+- Start the HTTP server and Vite separately:
+  ```bash
+  php artisan serve
+  npm run dev
+  ```
+- Or use the bundled concurrent runner (serves Laravel, queue worker, log stream, and Vite in one command):
+  ```bash
+  composer run dev
+  ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Default accounts
+The database seeder creates a ready-to-use login:
+- Email: `test@example.com`
+- Password: `password`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Testing
+- Execute the automated suite:
+  ```bash
+  php artisan test
+  ```
+  (Alias: `composer test`.)
 
-## Laravel Sponsors
+### Production build
+- Compile and version assets with Vite:
+  ```bash
+  npm run build
+  ```
+- Run migrations in production with
+  ```bash
+  php artisan migrate --force
+  ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Notable directories
+- `app/Http/Controllers` - recipe CRUD, saved recipe collection, and profile management controllers
+- `app/Models` - Eloquent models for recipes, ingredients, dietary tags, media, saves, and comments
+- `database/migrations` - schema for recipes, tags, ingredients, saved recipes, comments, and media
+- `database/seeders` - demo fixtures with recipes, media galleries, comments, and a test account
+- `resources/views` - Blade templates for catalog browsing, recipe authoring, saved collection, and layouts
 
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Localization
+Most interface copy is written in Catalan. Adjust wording in the Blade templates under `resources/views` if you need another language.
+In the next version I will make more languages ​​and we will have to implement it differently.
 
 ## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project ships with the standard Laravel MIT license.
